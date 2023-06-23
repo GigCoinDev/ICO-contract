@@ -17,9 +17,5 @@ contract NolanCoin  is ERC20 {
 
     }
 
-
-
-
-
 }
 

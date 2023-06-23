@@ -42,6 +42,7 @@ contract Ico {
     error NotOwner(address owner);
 
     error  Unauthorized(string message);
+    // error    success(string )
 
 
     function addToAllowList (address[] calldata addresses ,bool toggle) external  onlyOwner {
@@ -56,11 +57,26 @@ contract Ico {
 
 
 
-    function constribute    ()  external  payable {
+    function constribute()  external  payable {
         if(isPublic == false) {
              if(!allowList[msg.sender]) revert Unauthorized("Sorry you are not allowed to  contribute ");
 
         }
+
+        if (msg.value != CONTRIBUTION_LIMIT) revert Unauthorized("fist You must contribute 90Matic ");
         
+        nolanCoin.transfer(msg.sender, msg.value * ICO_EXCHANGE_RATE);
+
+
     }
-}
+
+    function withdraw(address to) external onlyOwner {
+
+
+        (bool  success, ) = to.call{ value: address(this).balance }("");
+        require(success,"withdraw failed");
+
+    }
+    
+    
+}   
